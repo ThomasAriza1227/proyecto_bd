@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactanos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<header class="navbar">
+    <div class="contenedor nav-contenido">
+        <a href="index.html" class="logo"> Mi<strong>Tienda</strong></a>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+        </nav>
+    </div>
+</header>
+
+<body>
+    <main class="contenedor" id="">
+        <div class="encabezado-principal">
+            <h1>Sistema de contacto </h1>
+            <p>¿Tienes dudas o sugerencias? Dejanos un mensaje y te responderemos pronto</p>
+        </div>
+
+
+        <section class="tarjeta" id="contacto">
+            <h2 id="tituloFormulario">Envianos un mensaje</h2>
+
+
+            <form id="formularioContacto">
+                <div class="campo">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" id="nombreContacto" required />
+                </div>
+
+                <div class="campo">
+                    <label for="asunto">Asunto:</label>
+                    <input type="text" id="asuntoContacto" placeholder="Ej: Perdida de producto" required />
+                </div>
+
+                <div class="campo">
+                    <label for="mensaje">Mensaje:</label>
+                    <input type="text" id="mensajeContacto" placeholder="Cuentanos tu problema o sugerencia" required />
+                </div>
+
+                <div class="campo">
+                    <label for="email">Correo Electronico:</label>
+                    <input type="email" id="emailContacto" placeholder="Ej: usuario@ejemplo.com" required />
+                </div>
+
+                <div class="acciones-form">
+                    <button type="submit" class="btn btn-guardar">Enviar Mensaje</button>
+                </div>
+            </form>
+
+            <section class="tarjeta" id="seccion-mensajes">
+                <h2>Lista de Mensajes</h2>
+                <div id="listaMensajes" class="lista-productos">
+        
+                </div>
+            </section>
+
+
+    </main>
+
+</body>
+
+<footer class="footer">
+    <div class="contenedor footer-contenido">
+        <p>&copy; 2026 Mi Tienda — Proyecto Formativo con Node.js, Express y MySQL.</p>
+    </div>
+</footer>
+
+<script src="app.js"></script>
+
+</html>

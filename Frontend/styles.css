@@ -254,7 +254,7 @@ textarea:focus {
 }
 
 .btn-editar {
-    background-color: #e2e8f0;
+    background-color: #006bf8f8;
     color: #334155;
 }
 
@@ -263,12 +263,12 @@ textarea:focus {
 }
 
 .btn-eliminar {
-    background-color: #fee2e2;
-    color: #dc2626;
+    background-color: #ff0000;
+    color: #090909;
 }
 
 .btn-eliminar:hover {
-    background-color: #fca5a5;
+    background-color: #872020;
 }
 
 /* --- Sección Contacto --- */
