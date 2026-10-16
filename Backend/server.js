@@ -73,10 +73,10 @@ app.delete("/productos/:id", (req, res) => {
 });
 
 app.post("/contactos", (req, res) => {
-  const { nombre, asunto, correo, mensaje } = req.body;
+  const { nombre, asunto, email, mensaje } = req.body;
 
-  const sql = "INSERT INTO contactos (nombre, asunto, correo, mensaje) VALUES (?, ?, ?, ?)";
-  const valores = [nombre, asunto, correo, mensaje];
+  const sql = "INSERT INTO contactos (nombre, asunto, email, mensaje) VALUES (?, ?, ?, ?)";
+  const valores = [nombre, asunto, email, mensaje];
 
   conexion.query(sql, valores, (error, resultado) => {
     if (error) {
