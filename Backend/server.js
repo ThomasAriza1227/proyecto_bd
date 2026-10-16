@@ -1,20 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const conexion = require("./db"); // Importamos la conexión creada en db.js
+const conexion = require("./db");
 
 const app = express();
 
-// Middlewares globales
-app.use(cors()); // Permitir peticiones desde el frontend
-app.use(express.json()); // Habilitar la lectura de datos en formato JSON en el cuerpo (req.body)
+app.use(cors());
+app.use(express.json());
 
-// Ruta de prueba
 app.get("/", (req, res) => {
   res.send("Servidor funcionando correctamente");
 });
 
-// 1. Obtener todos los productos (READ)
 app.get("/productos", (req, res) => {
   const sql = "SELECT * FROM productos";
 
@@ -23,16 +20,13 @@ app.get("/productos", (req, res) => {
       console.error("Error al consultar:", error);
       return res.status(500).json({ mensaje: "Error al consultar los productos" });
     }
-    // Retornamos el array de productos como JSON al cliente
     res.json(resultados);
   });
 });
 
-// 2. Crear un nuevo producto (CREATE)
 app.post("/productos", (req, res) => {
   const { nombre, precio, stock } = req.body;
 
-  // Consulta parametrizada con '?' para prevenir inyección SQL
   const sql = "INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)";
   const valores = [nombre, precio, stock];
 
@@ -49,7 +43,6 @@ app.post("/productos", (req, res) => {
   });
 });
 
-// 3. Actualizar un producto existente (UPDATE)
 app.put("/productos/:id", (req, res) => {
   const id = req.params.id;
   const { nombre, precio, stock } = req.body;
@@ -79,7 +72,6 @@ app.delete("/productos/:id", (req, res) => {
   });
 });
 
-
 app.post("/contactos", (req, res) => {
   const { nombre, asunto, correo, mensaje } = req.body;
 
@@ -95,9 +87,8 @@ app.post("/contactos", (req, res) => {
   });
 });
 
-
 app.get("/contactos", (req, res) => {
-  const sql = "SELECT * FROM contactos ORDER BY fecha DESC"; 
+  const sql = "SELECT * FROM contactos ORDER BY id DESC";
 
   conexion.query(sql, (error, resultados) => {
     if (error) {
@@ -107,7 +98,6 @@ app.get("/contactos", (req, res) => {
     res.json(resultados);
   });
 });
-
 
 app.delete("/contactos/:id", (req, res) => {
   const id = req.params.id;
@@ -124,6 +114,6 @@ app.delete("/contactos/:id", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(3000, () => {
-  console.log(` Servidor ejecutándose en http://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
