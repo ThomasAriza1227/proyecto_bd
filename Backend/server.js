@@ -93,9 +93,9 @@ app.post("/contactos", (req, res) => {
     return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
   }
 
-  // CAMBIO: la tabla se llama "contacto" (antes: mensajes_contacto)
+  
   const sql = "INSERT INTO contactos (nombre, email, asunto, mensaje) VALUES (?, ?, ?, ?)";
-  const valores = [nombre, correo, asunto, mensaje];
+  const valores = [nombre, email, asunto, mensaje];
 
   conexion.query(sql, valores, (error, resultado) => {
     if (error) {
@@ -112,7 +112,7 @@ app.post("/contactos", (req, res) => {
 
 // 6. Consultar todos los mensajes de contacto (GET)
 app.get("/contactos", (req, res) => {
-  // CAMBIO: tabla "contacto" y columna "fecha" (antes: mensajes_contacto / fecha_registro)
+  
   const sql = "SELECT * FROM contactos ORDER BY fecha DESC";
 
   conexion.query(sql, (error, resultados) => {
@@ -127,7 +127,6 @@ app.get("/contactos", (req, res) => {
 // 7. Eliminar un mensaje de contacto (DELETE)
 app.delete("/contactos/:id", (req, res) => {
   const id = req.params.id;
-  // CAMBIO: tabla "contacto" (antes: mensajes_contacto)
   const sql = "DELETE FROM contactos WHERE id = ?";
 
   conexion.query(sql, [id], (error, resultado) => {
