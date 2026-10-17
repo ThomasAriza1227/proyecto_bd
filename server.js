@@ -85,17 +85,17 @@ app.delete("/productos/:id", (req, res) => {
 // ==========================================
 
 // 5. Registrar un nuevo mensaje de contacto (POST)
-app.post("/contacto", (req, res) => {
-  const { nombre, correo, asunto, mensaje } = req.body;
+app.post("/contactos", (req, res) => {
+  const { nombre, email, asunto, mensaje } = req.body;
 
   // Validación básica de campos requeridos
-  if (!nombre || !correo || !asunto || !mensaje) {
+  if (!nombre || !email || !asunto || !mensaje) {
     return res.status(400).json({ mensaje: "Todos los campos son obligatorios" });
   }
 
-  // CAMBIO: la tabla se llama "contacto" (antes: mensajes_contacto)
-  const sql = "INSERT INTO contacto (nombre, correo, asunto, mensaje) VALUES (?, ?, ?, ?)";
-  const valores = [nombre, correo, asunto, mensaje];
+  
+  const sql = "INSERT INTO contactos (nombre, email, asunto, mensaje) VALUES (?, ?, ?, ?)";
+  const valores = [nombre, email, asunto, mensaje];
 
   conexion.query(sql, valores, (error, resultado) => {
     if (error) {
@@ -111,9 +111,9 @@ app.post("/contacto", (req, res) => {
 });
 
 // 6. Consultar todos los mensajes de contacto (GET)
-app.get("/contacto", (req, res) => {
-  // CAMBIO: tabla "contacto" y columna "fecha" (antes: mensajes_contacto / fecha_registro)
-  const sql = "SELECT * FROM contacto ORDER BY fecha DESC";
+app.get("/contactos", (req, res) => {
+  
+  const sql = "SELECT * FROM contactos ORDER BY fecha_registro DESC";
 
   conexion.query(sql, (error, resultados) => {
     if (error) {
@@ -125,14 +125,13 @@ app.get("/contacto", (req, res) => {
 });
 
 // 7. Eliminar un mensaje de contacto (DELETE)
-app.delete("/contacto/:id", (req, res) => {
+app.delete("/contactos/:id", (req, res) => {
   const id = req.params.id;
-  // CAMBIO: tabla "contacto" (antes: mensajes_contacto)
-  const sql = "DELETE FROM contacto WHERE id = ?";
+  const sql = "DELETE FROM contactos WHERE id = ?";
 
   conexion.query(sql, [id], (error, resultado) => {
     if (error) {
-      console.error("Error al eliminar mensaje de contacto:", error);
+      console.error("Error al eliminar mensaje de contactos:", error);
       return res.status(500).json({ mensaje: "Error al eliminar el mensaje de contacto" });
     }
     res.json({ mensaje: "Mensaje eliminado correctamente" });
