@@ -1,6 +1,6 @@
 const API_URL = "https://proyecto-bd-4e6q.onrender.com";
 
-// Elementos del DOM
+// Elementos del DOM (Productos)
 const listaProductos = document.getElementById("listaProductos");
 const formulario = document.getElementById("formularioProducto");
 const productoId = document.getElementById("productoId");
@@ -10,11 +10,15 @@ const stockInput = document.getElementById("stock");
 const btnGuardar = document.getElementById("btnGuardar");
 const btnCancelar = document.getElementById("btnCancelar");
 const tituloFormulario = document.getElementById("tituloFormulario");
+
+// Elementos del DOM (Contactos)
 const formContacto = document.getElementById("formularioContacto");
 const listaMensajes = document.getElementById("listaMensajes");
-const nombreContacto = document.getElementById("nombre");
-const correoContacto = document.getElementById("correo");
-const mensajeContacto = document.getElementById("mensaje");
+const nombreContacto = document.getElementById("nombreContacto");
+const asuntoContacto = document.getElementById("asuntoContacto");
+const mensajeContacto = document.getElementById("mensajeContacto");
+const emailContacto = document.getElementById("emailContacto");
+
 // 1. Función para consultar los productos y mostrarlos en el DOM (READ)
 async function cargarProductos() {
   if (!listaProductos) return;
@@ -53,7 +57,7 @@ async function cargarProductos() {
   }
 }
 
-// 2. Cargar datos del producto en el formulario para editar (UPDATE - Paso 1)
+// 2. Cargar datos del producto en el formulario para editar (UPDATE)
 function cargarEnFormulario(id, nombre, precio, stock) {
   productoId.value = id;
   nombreInput.value = nombre;
@@ -79,10 +83,10 @@ if (btnCancelar) {
   btnCancelar.addEventListener("click", cancelarEdicion);
 }
 
-// 3. Guardar o Actualizar según si hay un ID seleccionado (CREATE o UPDATE)
+// 3. Guardar o Actualizar producto (CREATE / UPDATE)
 if (formulario) {
   formulario.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Evitar que la página se recargue
+    event.preventDefault();
 
     const id = productoId.value;
     const nombre = nombreInput.value;
@@ -91,14 +95,12 @@ if (formulario) {
 
     try {
       if (id) {
-        // MODO ACTUALIZAR (PUT)
         await fetch(`${API_URL}/productos/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ nombre, precio, stock }),
         });
       } else {
-        // MODO CREAR (POST)
         await fetch(`${API_URL}/productos`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -106,15 +108,15 @@ if (formulario) {
         });
       }
 
-      cancelarEdicion(); // Limpiar formulario y restaurar botones
-      cargarProductos(); // Refrescar la lista en pantalla
+      cancelarEdicion();
+      cargarProductos();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     }
   });
 }
 
-// 4. Eliminar un producto (DELETE)
+// 4. Eliminar producto (DELETE)
 async function eliminarProducto(id) {
   const confirmar = confirm("¿Deseas eliminar este producto de la base de datos?");
   if (!confirmar) return;
@@ -124,140 +126,146 @@ async function eliminarProducto(id) {
       method: "DELETE",
     });
 
-    // Si estábamos editando ese mismo producto, cancelamos la edición
     if (productoId.value == id) {
       cancelarEdicion();
     }
 
-    cargarProductos(); // Refrescar la lista en pantalla
+    cargarProductos();
   } catch (error) {
     console.error("Error al eliminar producto:", error);
   }
 }
 
-// 5. Formulario de contacto (demostrativo en contacto.html)
+// 5. Enviar mensaje de contacto (POST)
 if (formContacto) {
-    formContacto.addEventListener("submit", async (event) => {
-        event.preventDefault();
+  formContacto.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-        const nombre = nombreContacto.value.trim();
-        const correo = correoContacto.value.trim();
-        const mensaje = mensajeContacto.value.trim();
-
-        try {
-            const respuesta = await fetch(`${API_URL}/mensajes`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    nombre,
-                    correo,
-                    mensaje
-                })
-            });
-
-            if (!respuesta.ok) {
-                throw new Error("No se pudo guardar el mensaje");
-            }
-
-            alert("¡Mensaje guardado correctamente!");
-            formContacto.reset();
-            cargarMensajes();
-
-        } catch (error) {
-            console.error("Error al guardar el mensaje:", error);
-            alert("Error al guardar el mensaje en la base de datos.");
-        }
-    });
-}
-// 6. Consultar los mensajes (READ)
-async function cargarMensajes() {
-    if (!listaMensajes) return;
+    const nombre = nombreContacto.value.trim();
+    const asunto = asuntoContacto.value.trim();
+    const mensaje = mensajeContacto.value.trim();
+    const email = emailContacto.value.trim();
 
     try {
-        const respuesta = await fetch(`${API_URL}/mensajes`);
+      const respuesta = await fetch(`${API_URL}/contactos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nombre,
+          email,
+          asunto,
+          mensaje
+        })
+      });
 
-        if (!respuesta.ok) {
-            throw new Error("Error al consultar los mensajes");
-        }
+      if (!respuesta.ok) {
+        throw new Error("No se pudo guardar el mensaje");
+      }
 
-        const mensajes = await respuesta.json();
-
-        listaMensajes.innerHTML = "";
-
-        if (mensajes.length === 0) {
-            listaMensajes.textContent = "No hay mensajes registrados.";
-            return;
-        }
-
-        mensajes.forEach((mensaje) => {
-            const elemento = document.createElement("div");
-            elemento.classList.add("producto");
-            elemento.style.position = "relative";
-
-            const nombre = document.createElement("h3");
-            nombre.textContent = mensaje.nombre_completo;
-
-            const correo = document.createElement("p");
-            correo.textContent = `Correo: ${mensaje.correo}`;
-
-            const contenido = document.createElement("p");
-            contenido.textContent = `Mensaje: ${mensaje.asunto}`;
-
-            const fecha = document.createElement("p");
-            fecha.textContent = `Fecha: ${new Date(mensaje.fecha_mensaje).toLocaleString()}`;
-
-            const btnEliminar = document.createElement("button");
-            btnEliminar.textContent = "Eliminar";
-            btnEliminar.classList.add("btn-eliminar");
-            btnEliminar.style.position = "absolute";
-            btnEliminar.style.top = "10px";
-            btnEliminar.style.right = "10px";
-
-            btnEliminar.addEventListener("click", () => {
-                eliminarMensaje(mensaje.id);
-            });
-
-            elemento.appendChild(nombre);
-            elemento.appendChild(correo);
-            elemento.appendChild(contenido);
-            elemento.appendChild(fecha);
-            elemento.appendChild(btnEliminar);
-
-            listaMensajes.appendChild(elemento);
-        });
+      alert("¡Mensaje guardado correctamente!");
+      formContacto.reset();
+      cargarMensajes();
 
     } catch (error) {
-        console.error("Error al cargar los mensajes:", error);
-        listaMensajes.textContent = "No se pudieron cargar los mensajes.";
+      console.error("Error al guardar el mensaje:", error);
+      alert("Error al guardar el mensaje en la base de datos.");
     }
+  });
+}
+
+// 6. Consultar los mensajes (READ)
+async function cargarMensajes() {
+  if (!listaMensajes) return;
+
+  try {
+    const respuesta = await fetch(`${API_URL}/contactos`);
+
+    if (!respuesta.ok) {
+      throw new Error("Error al consultar los mensajes");
+    }
+
+    const mensajes = await respuesta.json();
+
+    listaMensajes.innerHTML = "";
+
+    if (mensajes.length === 0) {
+      listaMensajes.textContent = "No hay mensajes registrados.";
+      return;
+    }
+
+    mensajes.forEach((msg) => {
+      const elemento = document.createElement("div");
+      elemento.classList.add("producto");
+      elemento.style.position = "relative";
+
+      const nombre = document.createElement("h3");
+      nombre.textContent = msg.nombre;
+
+      const correo = document.createElement("p");
+      correo.textContent = `Correo: ${msg.email}`;
+
+      const asunto = document.createElement("p");
+      asunto.textContent = `Asunto: ${msg.asunto}`;
+
+      const contenido = document.createElement("p");
+      contenido.textContent = `Mensaje: ${msg.mensaje}`;
+
+      const fecha = document.createElement("p");
+      fecha.textContent = `Fecha: ${new Date(msg.fecha_registro).toLocaleString()}`;
+
+      const btnEliminar = document.createElement("button");
+      btnEliminar.textContent = "Eliminar";
+      btnEliminar.classList.add("btn-eliminar");
+      btnEliminar.style.position = "absolute";
+      btnEliminar.style.top = "10px";
+      btnEliminar.style.right = "10px";
+
+      btnEliminar.addEventListener("click", () => {
+        eliminarMensaje(msg.id);
+      });
+
+      elemento.appendChild(nombre);
+      elemento.appendChild(correo);
+      elemento.appendChild(asunto);
+      elemento.appendChild(contenido);
+      elemento.appendChild(fecha);
+      elemento.appendChild(btnEliminar);
+
+      listaMensajes.appendChild(elemento);
+    });
+
+  } catch (error) {
+    console.error("Error al cargar los mensajes:", error);
+    listaMensajes.textContent = "No se pudieron cargar los mensajes.";
+  }
 }
 
 // 7. Eliminar un mensaje (DELETE)
 async function eliminarMensaje(id) {
-    const confirmar = confirm("¿Deseas eliminar este mensaje de la base de datos?");
+  const confirmar = confirm("¿Deseas eliminar este mensaje de la base de datos?");
 
-    if (!confirmar) return;
+  if (!confirmar) return;
 
-    try {
-        const respuesta = await fetch(`${API_URL}/mensajes/${id}`, {
-            method: "DELETE"
-        });
+  try {
+    const respuesta = await fetch(`${API_URL}/contactos/${id}`, {
+      method: "DELETE"
+    });
 
-        if (!respuesta.ok) {
-            throw new Error("No se pudo eliminar el mensaje");
-        }
-
-        alert("Mensaje eliminado correctamente");
-        await cargarMensajes();
-
-    } catch (error) {
-        console.error("Error al eliminar el mensaje:", error);
-        alert("Error al eliminar el mensaje.");
+    if (!respuesta.ok) {
+      throw new Error("No se pudo eliminar el mensaje");
     }
+
+    alert("Mensaje eliminado correctamente");
+    await cargarMensajes();
+
+  } catch (error) {
+    console.error("Error al eliminar el mensaje:", error);
+    alert("Error al eliminar el mensaje.");
+  }
 }
 
-// Llamado inicial al cargar la página
+// Inicialización
 cargarProductos();
 cargarMensajes();
