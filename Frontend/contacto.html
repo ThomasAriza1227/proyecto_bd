@@ -1,53 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contactanos</title>
+    <title>Contáctanos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-
-<header class="navbar">
-    <div class="contenedor nav-contenido">
-        <a href="index.html" class="logo"> Mi<strong>Tienda</strong></a>
-        <nav class="nav-links">
-            <a href="index.html">Inicio</a>
-        </nav>
-    </div>
-</header>
-
 <body>
-    <main class="contenedor" id="">
+    <header class="navbar">
+        <div class="contenedor nav-contenido">
+            <a href="index.html" class="logo">Mi<strong>Tienda</strong></a>
+            <nav class="nav-links">
+                <a href="index.html">Inicio</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor">
         <div class="encabezado-principal">
-            <h1>Sistema de contacto </h1>
-            <p>¿Tienes dudas o sugerencias? Dejanos un mensaje y te responderemos pronto</p>
+            <h1>Sistema de contacto</h1>
+            <p>¿Tienes dudas o sugerencias? Déjanos un mensaje y te responderemos pronto</p>
         </div>
 
-
         <section class="tarjeta" id="contacto">
-            <h2 id="tituloFormulario">Envianos un mensaje</h2>
-
+            <h2 id="tituloFormulario">Envíanos un mensaje</h2>
 
             <form id="formularioContacto">
                 <div class="campo">
-                    <label for="nombre">Nombre Completo:</label>
+                    <label for="nombreContacto">Nombre Completo:</label>
                     <input type="text" id="nombreContacto" required />
                 </div>
 
                 <div class="campo">
-                    <label for="asunto">Asunto:</label>
-                    <input type="text" id="asuntoContacto" placeholder="Ej: Perdida de producto" required />
+                    <label for="asuntoContacto">Asunto:</label>
+                    <input type="text" id="asuntoContacto" placeholder="Ej: Pérdida de producto" required />
                 </div>
 
                 <div class="campo">
-                    <label for="mensaje">Mensaje:</label>
-                    <input type="text" id="mensajeContacto" placeholder="Cuentanos tu problema o sugerencia" required />
+                    <label for="mensajeContacto">Mensaje:</label>
+                    <textarea id="mensajeContacto" placeholder="Cuéntanos tu problema o sugerencia" required></textarea>
                 </div>
 
                 <div class="campo">
-                    <label for="email">Correo Electronico:</label>
+                    <label for="emailContacto">Correo Electrónico:</label>
                     <input type="email" id="emailContacto" placeholder="Ej: usuario@ejemplo.com" required />
                 </div>
 
@@ -55,25 +52,21 @@
                     <button type="submit" class="btn btn-guardar">Enviar Mensaje</button>
                 </div>
             </form>
+        </section>
 
-            <section class="tarjeta" id="seccion-mensajes">
-                <h2>Lista de Mensajes</h2>
-                <div id="listaMensajes" class="lista-productos">
-        
-                </div>
-            </section>
-
-
+        <section class="tarjeta" id="seccion-mensajes">
+            <h2>Lista de Mensajes</h2>
+            <div id="listaMensajes" class="lista-productos"></div>
+        </section>
     </main>
 
+    <footer class="footer">
+        <div class="contenedor footer-contenido">
+            <p>&copy; 2026 Mi Tienda — Proyecto Formativo con Node.js, Express y MySQL.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
 </body>
-
-<footer class="footer">
-    <div class="contenedor footer-contenido">
-        <p>&copy; 2026 Mi Tienda — Proyecto Formativo con Node.js, Express y MySQL.</p>
-    </div>
-</footer>
-
-<script src="app.js"></script>
 
 </html>
